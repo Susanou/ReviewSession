@@ -7,6 +7,12 @@ public class RayShooter : MonoBehaviour {
 	private Camera _camera;
 	[SerializeField] private GameObject reticle;
 
+	[SerializeField] private GameObject hp;
+
+	private bool gameOver = true;
+	private float dx = 1;
+	private float dy = 1;
+
 	void Start() {
 		_camera = GetComponent<Camera>();
 
@@ -47,6 +53,10 @@ public class RayShooter : MonoBehaviour {
 				}
 			}
 		}
+
+		if(gameOver){
+			StartCoroutine(floatBounce(hp.GetComponent<RectTransform>()));
+		}
 	}
 
 	private IEnumerator SphereIndicator(Vector3 pos) {
@@ -57,4 +67,37 @@ public class RayShooter : MonoBehaviour {
 
 		Destroy(sphere);
 	}
+
+	IEnumerator floatBounce(RectTransform pos)
+	{
+		if (pos.transform.position.x > Screen.width - hp.GetComponent<Text>().preferredWidth/2)
+		{
+			dx = -1; 
+		}
+		if (pos.transform.position.x < 0 + hp.GetComponent<Text>().preferredWidth / 2)
+		{
+			dx = +1; 
+		}
+
+		if (pos.transform.position.y > Screen.height - hp.GetComponent<Text>().preferredHeight/2)
+		{
+			dy = -1; 
+		}
+		if (pos.transform.position.y < 0 + hp.GetComponent<Text>().preferredHeight / 2)
+		{
+			dy = +1; 
+		}
+
+
+		pos.Translate(new Vector3(dx, dy, 0));
+
+
+		Debug.Log(Screen.width + " " + Screen.height);
+
+		
+
+		yield return null;
+
+	}
+
 }
